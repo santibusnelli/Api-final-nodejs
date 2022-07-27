@@ -1,1 +1,22 @@
-GET http://127.0.0.1:8000/POST 
+GET http://127.0.0.1:8000/camisetas 
+
+###
+
+GET http://127.0.0.1:8000/camisetas/1
+
+###
+
+POST http://127.0.0.1:8000/camisetas
+Content-Type: application/json
+
+{
+        "nombre": "Camiseta Boca 2016 Tevez titular",
+        "año": 2016,
+        "club": "Boca",
+        "dorsal": 10,
+        "jugador": "Tevez",
+        "precio": 6000
+}
+
+###
+DELETE http://127.0.0.1:8000/camisetas/1
