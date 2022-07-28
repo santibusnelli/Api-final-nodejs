@@ -20,3 +20,19 @@ Content-Type: application/json
 
 ###
 DELETE http://127.0.0.1:8000/camisetas/1
+
+###
+
+PUT http://127.0.0.1:8000/camisetas/2 
+Content-Type: application/json
+
+{
+        "id":"2",
+        "nombre": "Camiseta River 1986 Alonso titular",
+        "año": 1986,
+        "club": "River",
+        "dorsal": 10,
+        "jugador": "Alonso",
+        "precio": 6000
+
+}
