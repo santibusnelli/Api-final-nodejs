@@ -1,4 +1,5 @@
 const { v4: uuidv4 } = require("uuid");
+const middleware = require("../utils/middleware");
 const router = require("express").Router();
 let dao = require("../Dataccess/camisetas");
 
@@ -20,14 +21,33 @@ router.get("/:id", (req, res) => {
 })
 
 /* Agregar camiseta */
+/*
 router.post("/", (req, res) => {
     const body = {...req.body, id: uuidv4() };
     dao.save(body);
     res.status(200).json(body);
 });
+*/
+// Agregar camiseta usuario logeado
+router.post("/", middleware.validarUserLogin, (req, res) => {
+    const body = { id: uuidv4(), ...req.body, user: req.user };
+    dao.save(body);
+    res.status(200).json(body);
+});
 
 /* Borrar camiseta */
+/*
 router.delete("/:id", (req, res) => {
+    const id = req.params.id;
+    if (dao.borrar(id)) {
+        res.sendStatus(202);
+    } else {
+        res.sendStatus(404);
+    }
+});
+*/
+// Borrar camiseta usuario logeado
+router.delete("/:id", middleware.validarUserLogin, (req, res) => {
     const id = req.params.id;
     if (dao.borrar(id)) {
         res.sendStatus(202);
@@ -37,8 +57,20 @@ router.delete("/:id", (req, res) => {
 });
 
 /* Modificar camiseta */
+/*
 router.put("/:id", (req, res) => {
     const id = req.params.id;
+    if (dao.update(id, req.body)) {
+        res.sendStatus(202);
+    } else {
+        res.sendStatus(404);
+    }
+});
+*/
+// Modificar camiseta usuario logeado
+router.put("/:id", middleware.validarUserLogin, (req, res) => {
+    const id = req.params.id;
+
     if (dao.update(id, req.body)) {
         res.sendStatus(202);
     } else {

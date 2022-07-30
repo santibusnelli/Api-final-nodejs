@@ -10,10 +10,26 @@ let club = [{
 }, {
     id: 4,
     club: "Racing"
+
+}, {
+    id: 5,
+    club: "San Lorenzo"
 }];
 
 
-const getAll = (id) => { return club };
+const getAll = (filter) => {
+    let filtrado = club;
+
+    if (filter.club) {
+        filtrado = filtrado.filter(e => e.club === filter.club)
+    }
+
+    if (filter.multiclub) {
+        filtrado = filtrado.filter(e => filter.multiclub.split(',').includes(e.club))
+    }
+
+    return filtrado
+};
 
 const getOne = (id) => { return club.find((registro) => registro.id == id); }
 

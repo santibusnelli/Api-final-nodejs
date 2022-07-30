@@ -1,0 +1,42 @@
+GET http://127.0.0.1:8000/usuarios
+
+###
+
+GET http://127.0.0.1:8000/usuarios?nombre=Carlos
+
+###
+
+GET http://127.0.0.1:8000/usuarios?multiapellido=Tapia,Busnelli
+
+###
+
+GET http://127.0.0.1:8000/usuarios/1
+
+###
+
+DELETE http://127.0.0.1:8000/usuarios/1
+
+###
+
+POST http://127.0.0.1:8000/usuarios
+Content-Type: application/json
+
+{
+        "nombre": "Lionel",
+        "apellido": "Messi",
+        "nickname": "lio10",
+        "email": "lioel10@gmail.com"
+}
+
+###
+
+PUT http://127.0.0.1:8000/usuarios/2
+Content-Type: application/json
+
+{
+        "id":"2" ,
+        "nombre": "Marcelo",
+        "apellido": "Tinelli",
+        "nickname": "cuervo14",
+        "email": "elcuervo@gmail.com"
+}

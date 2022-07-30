@@ -24,11 +24,39 @@ let camisetas = [{
         dorsal: 10,
         jugador: "Maradona",
         precio: 8500
+    },
+    {
+        id: 4,
+        nombre: "Camiseta Independiente 1984 Bochini titular",
+        año: 1984,
+        club: "Independiente",
+        dorsal: 10,
+        jugador: "Bochini",
+        precio: 4000
     }
 ];
 
 
-const getAll = (id) => { return camisetas };
+const getAll = (filter) => {
+    let filtrado = camisetas;
+
+    if (filter.nombre) {
+        filtrado = filtrado.filter(e => e.nombre === filter.nombre);
+    }
+    if (filter.año) {
+        filtrado = filtrado.filter(e => e.año === filter.año);
+    }
+    if (filter.club) {
+        filtrado = filtrado.filter(e => e.club === filter.club);
+    }
+    if (filter.precio) {
+        filtrado = filtrado.filter(e => e.precio === filter.precio);
+    }
+    if (filter.jugador) {
+        filtrado = filtrado.filter(e => e.jugador === filter.jugador);
+    }
+    return filtrado
+}
 
 const getOne = (id) => { return camisetas.find((registro) => registro.id == id); }
 
