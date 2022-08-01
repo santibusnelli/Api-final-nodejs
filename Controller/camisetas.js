@@ -3,12 +3,12 @@ const middleware = require("../utils/middleware");
 const router = require("express").Router();
 let dao = require("../Dataccess/camisetas");
 
-/* Obtener todo */
+// Obtener todo 
 router.get("/", (req, res) => {
     res.status(200).json(dao.getAll(req.query));
 });
 
-/* Obtener por id */
+// Obtener por id 
 router.get("/:id", (req, res) => {
     const id = req.params.id;
     const data = dao.getOne(id);
@@ -20,33 +20,30 @@ router.get("/:id", (req, res) => {
     }
 })
 
-/* Agregar camiseta */
+// Ordenar precio mayor a menor
+
 /*
-router.post("/", (req, res) => {
-    const body = {...req.body, id: uuidv4() };
-    dao.save(body);
-    res.status(200).json(body);
+router.get("/pmayor", (req, res) => {
+    res.status(200).json(dao.getMayorAMenor());
 });
 */
-// Agregar camiseta usuario logeado
+
+// Ordenar precio menor a mayor
+/*
+router.get("/pmenor", (req, res) => {
+    res.status(200).json(dao.getMayorAMenor().reverse());
+});
+*/
+
+// Agregar camiseta admin logeado
 router.post("/", middleware.validarUserLogin, (req, res) => {
     const body = { id: uuidv4(), ...req.body, user: req.user };
     dao.save(body);
     res.status(200).json(body);
 });
 
-/* Borrar camiseta */
-/*
-router.delete("/:id", (req, res) => {
-    const id = req.params.id;
-    if (dao.borrar(id)) {
-        res.sendStatus(202);
-    } else {
-        res.sendStatus(404);
-    }
-});
-*/
-// Borrar camiseta usuario logeado
+
+// Borrar camiseta admin logeado
 router.delete("/:id", middleware.validarUserLogin, (req, res) => {
     const id = req.params.id;
     if (dao.borrar(id)) {
@@ -56,18 +53,8 @@ router.delete("/:id", middleware.validarUserLogin, (req, res) => {
     }
 });
 
-/* Modificar camiseta */
-/*
-router.put("/:id", (req, res) => {
-    const id = req.params.id;
-    if (dao.update(id, req.body)) {
-        res.sendStatus(202);
-    } else {
-        res.sendStatus(404);
-    }
-});
-*/
-// Modificar camiseta usuario logeado
+
+// Modificar camiseta admin logeado
 router.put("/:id", middleware.validarUserLogin, (req, res) => {
     const id = req.params.id;
 

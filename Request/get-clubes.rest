@@ -1,0 +1,14 @@
+GET http://127.0.0.1:8000/clubes
+
+###
+
+GET http://127.0.0.1:8000/clubes?club=Boca
+
+###
+
+GET http://127.0.0.1:8000/clubes?multiclub=Boca,Racing
+
+###
+
+GET http://127.0.0.1:8000/clubes/1
+

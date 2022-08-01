@@ -1,0 +1,123 @@
+# @name login
+POST http://127.0.0.1:8000/login
+Content-Type: application/json
+
+{
+    "username": "admin",
+    "password": "123456"
+}
+
+
+
+//CAMISETAS
+
+###
+POST http://127.0.0.1:8000/camisetas
+Content-Type: application/json
+Authorization: Bearer {{ login.response.body.token }}
+
+{
+        "nombre": "Camiseta Boca 2016 Tevez titular",
+        "año": 2016,
+        "club": "Boca",
+        "dorsal": 10,
+        "jugador": "Tevez",
+        "precio": 6000
+}
+
+###
+
+DELETE http://127.0.0.1:8000/camisetas/1
+Authorization: Bearer {{ login.response.body.token }}
+
+###
+
+PUT http://127.0.0.1:8000/camisetas/2 
+Content-Type: application/json
+Authorization: Bearer {{ login.response.body.token }}
+
+{
+        "id":"2",
+        "nombre": "Camiseta River 1986 Alonso titular",
+        "año": 1986,
+        "club": "River",
+        "dorsal": 10,
+        "jugador": "Alonso",
+        "precio": 6000
+
+}
+
+
+
+
+// CLUBES
+
+###
+
+DELETE http://127.0.0.1:8000/clubes/1
+Authorization: Bearer {{ login.response.body.token }}
+
+###
+
+POST http://127.0.0.1:8000/clubes
+Content-Type: application/json
+Authorization: Bearer {{ login.response.body.token }}
+
+{
+        "club": "Velez"
+}
+
+###
+
+PUT http://127.0.0.1:8000/clubes/2
+Content-Type: application/json
+Authorization: Bearer {{ login.response.body.token }}
+
+{
+        "id":"2" ,
+        "club": "Huracan"
+}
+
+###
+
+
+
+
+//USUARIOS
+
+GET http://127.0.0.1:8000/usuarios
+Authorization: Bearer {{ login.response.body.token }}
+
+###
+
+GET http://127.0.0.1:8000/usuarios?nombre=Carlos
+Authorization: Bearer {{ login.response.body.token }}
+
+###
+
+GET http://127.0.0.1:8000/usuarios?multiapellido=Tapia,Busnelli
+Authorization: Bearer {{ login.response.body.token }}
+
+###
+
+GET http://127.0.0.1:8000/usuarios/1
+Authorization: Bearer {{ login.response.body.token }}
+
+###
+
+DELETE http://127.0.0.1:8000/usuarios/1
+Authorization: Bearer {{ login.response.body.token }}
+
+###
+
+PUT http://127.0.0.1:8000/usuarios/2
+Content-Type: application/json
+Authorization: Bearer {{ login.response.body.token }}
+
+{
+        "id":"2" ,
+        "nombre": "Marcelo",
+        "apellido": "Tinelli",
+        "nickname": "cuervo14",
+        "email": "elcuervo@gmail.com"
+}

@@ -58,6 +58,8 @@ const getAll = (filter) => {
     return filtrado
 }
 
+//const getMayorAMenor = () => { return camisetas.sort((a, b) => a.precio - b.precio) };
+
 const getOne = (id) => { return camisetas.find((registro) => registro.id == id); }
 
 const save = (body) => { camisetas.push(body); }
@@ -80,4 +82,4 @@ const update = (id, req) => {
     return false
 }
 
-module.exports = { getAll, getOne, save, borrar, update };
+module.exports = { getAll, getOne, save, borrar, update, };

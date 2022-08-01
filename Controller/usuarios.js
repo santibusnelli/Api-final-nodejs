@@ -4,11 +4,11 @@ const middleware = require('../utils/middleware');
 const router = require("express").Router();
 let dao = require("../dataccess/usuarios");
 
-router.get("/", (req, res) => {
+router.get("/", middleware.validarUserLogin, (req, res) => {
     res.status(200).json(dao.getAll(req.query));
 });
 
-router.get("/:id", (req, res) => {
+router.get("/:id", middleware.validarUserLogin, (req, res) => {
     const id = req.params.id;
     const data = dao.getOne(id);
     if (data) {
@@ -26,7 +26,7 @@ router.post("/", (req, res) => {
 });
 
 
-router.delete("/:id", (req, res) => {
+router.delete("/:id", middleware.validarUserLogin, (req, res) => {
     const id = req.params.id;
 
     if (dao.borrar(id)) {
@@ -37,7 +37,7 @@ router.delete("/:id", (req, res) => {
 });
 
 
-router.put("/:id", (req, res) => {
+router.put("/:id", middleware.validarUserLogin, (req, res) => {
     const id = req.params.id;
     if (dao.update(id, req.body)) {
         res.sendStatus(202);

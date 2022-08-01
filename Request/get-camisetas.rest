@@ -1,0 +1,16 @@
+GET http://127.0.0.1:8000/camisetas
+
+###
+
+GET http://127.0.0.1:8000/camisetas?jugador=Maradona
+
+###
+
+GET http://127.0.0.1:8000/camisetas?jugador=Maradona&club=Boca
+
+###
+
+GET http://127.0.0.1:8000/camisetas/4
+
+
+

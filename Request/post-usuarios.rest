@@ -1,0 +1,10 @@
+POST http://127.0.0.1:8000/usuarios
+Content-Type: application/json
+
+{
+        "nombre": "Lionel",
+        "apellido": "Messi",
+        "nickname": "lio10",
+        "email": "lioel10@gmail.com"
+}
+
