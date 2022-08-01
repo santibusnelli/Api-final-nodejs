@@ -35,6 +35,7 @@ router.get("/pmenor", (req, res) => {
 });
 */
 
+
 // Agregar camiseta admin logeado
 router.post("/", middleware.validarUserLogin, (req, res) => {
     const body = { id: uuidv4(), ...req.body, user: req.user };

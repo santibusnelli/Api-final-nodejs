@@ -38,10 +38,10 @@ const getAll = (filter) => {
         filtrado = filtrado.filter(e => e.email === filter.email);
     }
     if (filter.multinombres) {
-        filtrar = filtrar.filter(e => filter.multinombres.split(',').includes(e.nombre));
+        filtrado = filtrado.filter(e => filter.multinombres.split(',').includes(e.nombre));
     }
     if (filter.multiapellidos) {
-        filtrar = filtrar.filter(e => filter.multiapellidos.split(',').includes(e.apellido));
+        filtrado = filtrado.filter(e => filter.multiapellidos.split(',').includes(e.apellido));
     }
     return filtrado
 }
