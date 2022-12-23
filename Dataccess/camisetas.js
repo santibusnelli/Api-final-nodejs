@@ -1,85 +1,123 @@
-let camisetas = [{
-        id: 1,
-        nombre: "Camiseta Boca 1981 Maradona",
-        año: 1981,
-        club: "Boca",
-        dorsal: 10,
-        jugador: "Maradona",
-        precio: 9000
-    },
-    {
-        id: 2,
-        nombre: "Camiseta Argentinos Juniors 1988 Redondo roja",
-        año: 1988,
-        club: "Argentinos Juniors",
-        dorsal: 5,
-        jugador: "Redondo",
-        precio: 6000
-    },
-    {
-        id: 3,
-        nombre: "Camiseta Argentina 1986 titular",
-        año: 1986,
-        club: "Argentina",
-        dorsal: 10,
-        jugador: "Maradona",
-        precio: 8500
-    },
-    {
-        id: 4,
-        nombre: "Camiseta Independiente 1984 Bochini titular",
-        año: 1984,
-        club: "Independiente",
-        dorsal: 10,
-        jugador: "Bochini",
-        precio: 4000
+const { Camisetas, Clubs } = require('../models/')
+
+const getAll = async(filter) => {
+    let options = {
+        attributes: { exclude: ['createdAt', 'updatedAt'] },
+        include: [
+            { model: Clubs, required: false, }
+        ]
     }
-];
-
-
-const getAll = (filter) => {
-    let filtrado = camisetas;
-
     if (filter.nombre) {
-        filtrado = filtrado.filter(e => e.nombre === filter.nombre);
+        options = {
+            ...options,
+            where: {
+                ...options.where,
+                nombre: filter.nombre
+            }
+        }
     }
     if (filter.año) {
-        filtrado = filtrado.filter(e => e.año === filter.año);
+        options = {
+            ...options,
+            where: {
+                ...options.where,
+                año: filter.año
+            }
+        }
     }
-    if (filter.club) {
-        filtrado = filtrado.filter(e => e.club === filter.club);
+    if (filter.club_id) {
+        options = {
+            ...options,
+            where: {
+                ...options.where,
+                clubId: filter.club_id
+            }
+        }
     }
     if (filter.precio) {
-        filtrado = filtrado.filter(e => e.precio === filter.precio);
+        options = {
+            ...options,
+            where: {
+                ...options.where,
+                precio: filter.precio
+            }
+        }
     }
     if (filter.jugador) {
-        filtrado = filtrado.filter(e => e.jugador === filter.jugador);
+        options = {
+            ...options,
+            where: {
+                ...options.where,
+                jugador: filter.jugador
+            }
+        }
     }
-    return filtrado
+    if (filter.dorsal) {
+        options = {
+            ...options,
+            where: {
+                ...options.where,
+                dorsal: filter.dorsal
+            }
+        }
+    }
+    const datos = await Camisetas.findAll(options)
+    return datos
 }
 
-//const getMayorAMenor = () => { return camisetas.sort((a, b) => a.precio - b.precio) };
 
-const getOne = (id) => { return camisetas.find((registro) => registro.id == id); }
-
-const save = (body) => { camisetas.push(body); }
-
-const borrar = (id) => {
-    const index = camisetas.findIndex((registro) => registro.id == id);
-    if (index >= 0) {
-        camisetas.splice(index, 1);
-        return true
-    }
-    return false
+const getOne = async(id) => {
+    return await Camisetas.findByPk(id, {
+        attributes: { exclude: ['createdAt', 'updatedAt'] },
+        include: [
+            { model: Clubs, required: false }
+        ]
+    });
 }
 
-const update = (id, req) => {
-    const index = camisetas.findIndex((registro) => registro.id == id);
-    if (index >= 0) {
-        camisetas[index] = req;
-        return true
+const save = async(body) => {
+    const data = {...body };
+    const camisetas = await Camisetas.create(data);
+    if (body.clubs) {
+        let clubs = {}
+        if (body.clubs.id) {
+            clubs = await Clubs.findByPk(body.clubs.id)
+        } else {
+            clubs = await Clubs.create(body.clubs)
+        }
+        camisetas.clubId = clubs.id
+        await camisetas.save()
     }
-    return false
+    return camisetas
+}
+
+const borrar = async(id) => {
+    await Camisetas.destroy({
+        where: {
+            id
+        }
+    })
+}
+
+const update = async(id, body) => {
+    const data = await getOne(id)
+    data.nombre = body.nombre
+    data.año = body.año
+    data.club_id = body.club_id
+    data.dorsal = body.dorsal
+    data.jugador = body.jugador
+    data.precio = body.precio
+    if (body.clubs) {
+        let clubs = {}
+        if (body.clubs.id) {
+            clubs = await Clubs.findByPk(body.clubs.id)
+        } else {
+            clubs = await Clubs.create(body.clubs)
+        }
+        data.clubId = clubs.id
+    }
+    await data.save()
+    return data;
 }
 
 module.exports = { getAll, getOne, save, borrar, update, };

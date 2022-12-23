@@ -1,71 +1,77 @@
-let usuarios = [{
-        id: 1,
-        nombre: "Santiago",
-        apellido: "Busnelli",
-        nickname: "santibus",
-        email: "santibusnelli57@gmail.com"
-    },
-    {
-        id: 2,
-        nombre: "Claudio",
-        apellido: "Tapia",
-        nickname: "chiqui",
-        email: "chiquitapia@gmail.com"
-    },
-    {
-        id: 3,
-        nombre: "Carlos",
-        apellido: "Maslaton",
-        nickname: "Carlosmasla",
-        email: "maslaton@gmail.com"
+const { Usuarios } = require('../models/')
+
+const getAll = async(filter) => {
+    let options = {
+        attributes: { exclude: ['createdAt', 'updatedAt'] }
     }
-
-]
-
-const getAll = (filter) => {
-    let filtrado = usuarios;
-
     if (filter.nombre) {
-        filtrado = filtrado.filter(e => e.nombre === filter.nombre);
+        options = {
+            ...options,
+            where: {
+                ...options.where,
+                nombre: filter.nombre
+            }
+        }
     }
     if (filter.apellido) {
-        filtrado = filtrado.filter(e => e.apellido === filter.apellido);
+        options = {
+            ...options,
+            where: {
+                ...options.where,
+                apellido: filter.apellido
+            }
+        }
     }
     if (filter.nickname) {
-        filtrado = filtrado.filter(e => e.nickname === filter.nickname);
+        options = {
+            ...options,
+            where: {
+                ...options.where,
+                nickname: filter.nickname
+            }
+        }
     }
     if (filter.email) {
-        filtrado = filtrado.filter(e => e.email === filter.email);
+        options = {
+            ...options,
+            where: {
+                ...options.where,
+                email: filter.email
+            }
+        }
     }
-    if (filter.multinombres) {
-        filtrado = filtrado.filter(e => filter.multinombres.split(',').includes(e.nombre));
-    }
-    if (filter.multiapellidos) {
-        filtrado = filtrado.filter(e => filter.multiapellidos.split(',').includes(e.apellido));
-    }
-    return filtrado
+    const datos = await Usuarios.findAll(options)
+    return datos
 }
 
-const getOne = (id) => { return usuarios.find((registro) => registro.id == id); }
-
-const save = (body) => { usuarios.push(body); }
-
-const borrar = (id) => {
-    const index = usuarios.findIndex((registro) => registro.id == id);
-    if (index >= 0) {
-        usuarios.splice(index, 1);
-        return true
-    }
-    return false
+const getOne = async(id) => {
+    return await Usuarios.findByPk(id, {
+        attributes: { exclude: ['createdAt', 'updatedAt'] }
+    });
 }
 
-const update = (id, req) => {
-    const index = usuarios.findIndex((registro) => registro.id == id);
-    if (index >= 0) {
-        usuarios[index] = req;
-        return true
-    }
-    return false
+const save = async(body) => {
+    const data = {...body }
+    const usuario = await Usuarios.create(data);
+    return usuario;
+}
+
+const borrar = async(id) => {
+    await Usuarios.destroy({
+        where: {
+            id
+        }
+    })
+}
+
+const update = async(id, body) => {
+    const data = await getOne(id)
+    data.nombre = body.nombre
+    data.apellido = body.apellido
+    data.nickname = body.nickname
+    data.email = body.email
+    await data.save()
+    return data;
 }
 
 module.exports = { getAll, getOne, save, borrar, update };

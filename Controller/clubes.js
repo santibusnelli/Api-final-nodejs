@@ -4,15 +4,14 @@ const router = require("express").Router();
 let dao = require("../Dataccess/clubes");
 
 /* Obtener todo */
-router.get("/", (req, res) => {
-    res.status(200).json(dao.getAll(req.query));
+router.get("/", async(req, res) => {
+    res.status(200).json(await dao.getAll(req.query));
 });
 
 /* Obtener por id */
-router.get("/:id", (req, res) => {
+router.get("/:id", async(req, res) => {
     const id = req.params.id;
-    const data = dao.getOne(id);
-
+    const data = await dao.getOne(id);
     if (data) {
         res.status(200).json(data);
     } else {
@@ -20,27 +19,25 @@ router.get("/:id", (req, res) => {
     }
 })
 
-/* Agregar camiseta */
-router.post("/", middleware.validarUserLogin, (req, res) => {
-    const body = {...req.body, id: uuidv4() };
-    dao.save(body);
-    res.status(200).json(body);
+/* Agregar club */
+router.post("/", middleware.validarUserLogin, async(req, res) => {
+    const body = {...req.body, user: req.user };
+    const data = await dao.save(body);
+    res.status(200).json(data);
 });
 
-/* Borrar camiseta */
-router.delete("/:id", middleware.validarUserLogin, (req, res) => {
+/* Borrar club */
+router.delete("/:id", middleware.validarUserLogin, async(req, res) => {
     const id = req.params.id;
-    if (dao.borrar(id)) {
-        res.sendStatus(202);
-    } else {
-        res.sendStatus(404);
-    }
+    await dao.borrar(id)
+    res.sendStatus(202);
+
 });
 
-/* Modificar camiseta */
-router.put("/:id", middleware.validarUserLogin, (req, res) => {
+/* Modificar club */
+router.put("/:id", middleware.validarUserLogin, async(req, res) => {
     const id = req.params.id;
-    if (dao.update(id, req.body)) {
+    if (await dao.update(id, req.body)) {
         res.sendStatus(202);
     } else {
         res.sendStatus(404);

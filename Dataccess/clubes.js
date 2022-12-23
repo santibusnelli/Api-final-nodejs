@@ -1,56 +1,47 @@
-let club = [{
-    id: 1,
-    club: "Boca"
-}, {
-    id: 2,
-    club: "River"
-}, {
-    id: 3,
-    club: "Independiente"
-}, {
-    id: 4,
-    club: "Racing"
+const { Clubs } = require('../models/')
 
-}, {
-    id: 5,
-    club: "San Lorenzo"
-}];
-
-
-const getAll = (filter) => {
-    let filtrado = club;
-
-    if (filter.club) {
-        filtrado = filtrado.filter(e => e.club === filter.club)
+const getAll = async(filter) => {
+    let options = {
+        attributes: { exclude: ['createdAt', 'updatedAt'] }
     }
-
-    if (filter.multiclub) {
-        filtrado = filtrado.filter(e => filter.multiclub.split(',').includes(e.club))
+    if (filter.nombre) {
+        options = {
+            ...options,
+            where: {
+                ...options.where,
+                nombre: filter.nombre
+            }
+        }
     }
-
-    return filtrado
+    const datos = await Clubs.findAll(options)
+    return datos
 };
 
-const getOne = (id) => { return club.find((registro) => registro.id == id); }
-
-const save = (body) => { club.push(body); }
-
-const borrar = (id) => {
-    const index = club.findIndex((registro) => registro.id == id);
-    if (index >= 0) {
-        club.splice(index, 1);
-        return true
-    }
-    return false
+const getOne = async(id) => {
+    return await Clubs.findByPk(id, {
+        attributes: { exclude: ['createdAt', 'updatedAt'] }
+    });
 }
 
-const update = (id, req) => {
-    const index = club.findIndex((registro) => registro.id == id);
-    if (index >= 0) {
-        club[index] = req;
-        return true
-    }
-    return false
+const save = async(body) => {
+    const data = {...body };
+    const club = await Clubs.create(data);
+    return club;
+}
+
+const borrar = async(id) => {
+    await Clubs.destroy({
+        where: {
+            id
+        }
+    })
+}
+
+const update = async(id, body) => {
+    const data = await getOne(id)
+    data.nombre = body.nombre
+    await data.save()
+    return data;
 }
 
 module.exports = { getAll, getOne, save, borrar, update };
